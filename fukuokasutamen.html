@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>福岡 街スタメン 2026 ジェネレーター(モック)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .scoreboard {
+            background-color: #1a202c;
+            color: #f7fafc;
+            border: 12px solid #4a5568;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 49px,
+                #2d3748 50px
+            );
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans pb-20">
+
+<div class="max-w-3xl mx-auto pt-10 px-4">
+    <header class="text-center mb-10">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-orange-600 mb-2">福岡 街スタメン 2026</h1>
+        <p class="text-gray-600">あなただけの最強の「福岡の街」打線を組もう！</p>
+    </header>
+
+    <div id="form-area" class="bg-white p-6 md:p-8 rounded-xl shadow-md">
+        <div class="mb-8 border-b border-gray-200 pb-6">
+            <p class="text-base font-bold text-gray-700 mb-2">
+                テーマは自由！「住みたい」「飲みたい」「ただただ好き」…<br>
+                あなたのフィーリングで、最強の9エリアを選んでください。
+            </p>
+            <p class="text-sm text-gray-500">
+                ※打順の組み方に正解はありません。コツコツつなぐ伝統的な打線にするか、<br>
+                2番にいきなり最強の街を置く現代風にするか、すべては監督（あなた）次第です！
+            </p>
+        </div>
+
+        <form id="stamen-form">
+            <div id="lineup-container" class="space-y-6"></div>
+
+            <div class="mt-10 bg-orange-50 p-6 rounded-lg border border-orange-200">
+                <label class="block text-xl font-bold text-orange-700 mb-2">🎙 監督（あなた）の意図・コンセプト</label>
+                <p class="text-sm text-orange-600 mb-3">このスタメンのテーマや、打順のこだわりを熱く語ってください！</p>
+                <textarea id="director-comment" rows="3" class="w-full p-3 border border-orange-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="入力例：休日にのんびりできる街を中心に、下位打線にはディープな飲み屋街を配置しました！"></textarea>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-full text-lg shadow-lg transition duration-200 w-full md:w-auto">
+                    スタメン画像を作成する！
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div id="result-area" class="hidden mt-12">
+        <div class="text-center mb-4">
+            <h2 class="text-2xl font-bold">🎉 あなたのスタメンが完成しました！</h2>
+            <p class="text-sm text-gray-500">※実際はこれが1枚の画像として生成され、長押し等で保存できます。</p>
+        </div>
+
+        <div id="capture-area" class="scoreboard p-6 relative">
+            <h3 class="text-center text-2xl font-bold mb-6 tracking-widest text-orange-400">FUKUOKA CITY LINEUP</h3>
+            <div id="result-list" class="grid grid-cols-1 gap-2 mb-8 text-lg md:text-xl font-bold tracking-wide pl-4 md:pl-10"></div>
+
+            <div class="mt-4 pt-4 border-t border-gray-600">
+                <span class="text-orange-400 text-sm font-bold block mb-1">▶ 監督コメント</span>
+                <p id="result-comment" class="text-gray-300 text-base leading-relaxed"></p>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center flex justify-center gap-4">
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded shadow">X(Twitter)でシェア</button>
+            <button onclick="location.reload()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-8 rounded shadow">やり直す</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const lineupRoles = [
+        { no: 1, role: "1番打者", desc: "まずはここから。打線のスタートを飾る街" },
+        { no: 2, role: "2番打者", desc: "小技でつなぐ？いきなり最強？あなた次第の自由枠" },
+        { no: 3, role: "3番打者", desc: "打線の中心。魅力と実力を兼ね備えた街" },
+        { no: 4, role: "4番打者", desc: "圧倒的存在感。このチームの顔となる主役" },
+        { no: 5, role: "5番打者", desc: "主役を支える、あるいはもう一つの顔となる街" },
+        { no: 6, role: "6番打者", desc: "ここで一息、あるいは意外な伏兵を" },
+        { no: 7, role: "7番打者", desc: "あなたの個性が光る、こだわりの見せどころ" },
+        { no: 8, role: "8番打者", desc: "どっしり構える安心感。または知る人ぞ知る街" },
+        { no: 9, role: "9番打者", desc: "上位へつなぐラストバッター。締めくくりの街" }
+    ];
+
+    const container = document.getElementById('lineup-container');
+
+    lineupRoles.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = "flex flex-col md:flex-row md:items-center gap-2 md:gap-4 border-l-4 border-orange-500 pl-4";
+        row.innerHTML = `
+            <div class="md:w-1/3 flex items-center">
+                <span class="text-2xl font-black text-orange-500 mr-3">${item.no}</span>
+                <div>
+                    <div class="font-bold text-gray-800">${item.role}</div>
+                    <div class="text-xs text-gray-500">${item.desc}</div>
+                </div>
+            </div>
+            <div class="md:w-2/3">
+                <input type="text" id="player-${item.no}" required
+                    class="w-full p-2 border-b-2 border-gray-300 focus:border-orange-500 focus:outline-none transition-colors text-lg font-bold"
+                    placeholder="街の名前を入力">
+            </div>
+        `;
+        container.appendChild(row);
+    });
+
+    document.getElementById('stamen-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        document.getElementById('form-area').classList.add('hidden');
+        document.getElementById('result-area').classList.remove('hidden');
+
+        const resultList = document.getElementById('result-list');
+        resultList.innerHTML = '';
+
+        lineupRoles.forEach((item) => {
+            const cityName = document.getElementById(`player-${item.no}`).value;
+            const resultRow = document.createElement('div');
+            resultRow.className = "flex items-center gap-6";
+            resultRow.innerHTML = `
+                <span class="text-green-400 w-6">${item.no}</span>
+                <span class="text-white tracking-widest text-xl">${cityName}</span>
+            `;
+            resultList.appendChild(resultRow);
+        });
+
+        const comment = document.getElementById('director-comment').value;
+        const commentEl = document.getElementById('result-comment');
+        commentEl.innerText = comment.trim() === "" ? "俺たちの街がナンバーワンだ！" : comment;
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+
+</body>
+</html>

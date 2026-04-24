@@ -88,13 +88,25 @@
                 <canvas id="canvas-preview" class="rounded shadow-lg" style="max-width:100%; display:block;"></canvas>
             </div>
 
+            <!-- ハッシュタグバナー -->
+            <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-6 text-center">
+                <p class="text-sm text-orange-700 font-bold mb-2">📣 投稿するときはこのハッシュタグをつけてね！</p>
+                <div class="flex items-center justify-center gap-3">
+                    <span id="hashtag-text" class="text-orange-600 font-black text-lg tracking-wide">#福岡街スタメン2026</span>
+                    <button onclick="copyHashtag()" class="bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full transition">
+                        コピー
+                    </button>
+                </div>
+                <p id="copy-msg" class="text-xs text-green-600 font-bold mt-1 hidden">コピーしました！</p>
+            </div>
+
             <!-- SNSボタン -->
             <div id="sns-x" class="sns-section">
                 <div class="flex flex-col items-center gap-3">
-                    <button onclick="shareToX()" class="sns-btn bg-black hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-full w-full max-w-xs flex items-center justify-center gap-2">
-                        <span>𝕏</span> Xに投稿する
+                    <button onclick="downloadImage('x')" class="sns-btn bg-black hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-full w-full max-w-xs flex items-center justify-center gap-2">
+                        📥 画像を保存する
                     </button>
-                    <p class="text-xs text-gray-400">ツイート画面が開きます（画像は別途添付してください）</p>
+                    <p class="text-xs text-gray-400">保存した画像に <span class="font-bold text-gray-600">#福岡街スタメン2026</span> をつけてXに投稿してください</p>
                 </div>
             </div>
 
@@ -103,16 +115,16 @@
                     <button onclick="downloadImage('insta')" class="sns-btn bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white font-bold py-3 px-8 rounded-full w-full max-w-xs">
                         📥 画像を保存する
                     </button>
-                    <p class="text-xs text-gray-400">保存した画像をInstagramアプリから投稿してください</p>
+                    <p class="text-xs text-gray-400">保存した画像に <span class="font-bold text-gray-600">#福岡街スタメン2026</span> をつけてInstagramに投稿してください</p>
                 </div>
             </div>
 
             <div id="sns-tiktok" class="sns-section hidden">
                 <div class="flex flex-col items-center gap-3">
                     <button onclick="downloadImage('tiktok')" class="sns-btn bg-black hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-full w-full max-w-xs">
-                        🎵 画像を保存する
+                        📥 画像を保存する
                     </button>
-                    <p class="text-xs text-gray-400">保存した画像をTikTokアプリから投稿してください</p>
+                    <p class="text-xs text-gray-400">保存した画像に <span class="font-bold text-gray-600">#福岡街スタメン2026</span> をつけてTikTokに投稿してください</p>
                 </div>
             </div>
         </div>
@@ -341,13 +353,13 @@
         return lines.slice(0, 3); // 最大3行
     }
 
-    // Xシェア
-    function shareToX() {
-        const text = `私の福岡街スタメン2026🔥\n\n` +
-            stamenData.players.map(p => `${p.no}番 ${p.city}`).join('\n') +
-            `\n\n${stamenData.comment}\n\n#福岡街スタメン2026 #福岡`;
-        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-        window.open(url, '_blank');
+    // ハッシュタグコピー
+    function copyHashtag() {
+        navigator.clipboard.writeText('#福岡街スタメン2026').then(() => {
+            const msg = document.getElementById('copy-msg');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 2000);
+        });
     }
 
     // 画像ダウンロード
